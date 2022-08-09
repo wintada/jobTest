@@ -1,8 +1,8 @@
-import react from 'React'
-
 const index = () => {
     return <>
-    
+        <div>
+            
+        </div>
     </>
 }
 
