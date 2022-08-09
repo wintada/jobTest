@@ -160,19 +160,21 @@ const itemslibrary = () => {
                                             return (
                                                 <tr key={idx} className='divide-y-2 cursor-pointer'>
                                                     <td className='w-0'/>
-                                                    <td className='flex flex-row py-1 pl-2 border-r-2' onClick={()=>console.log('Click variations:', idx)}>
-                                                        <div>
-                                                            <Checkbox color="blue" defaultChecked />
-                                                        </div>
-                                                        <div className='flex flex-row items-center pl-2 text-blue-800'>
-                                                            <div className='flex bg-gray-100 w-10 h-10 rounded items-center justify-center mr-3 hover:bg-blue-300'>
-                                                                <FontAwesomeIcon className="text-base text-gray-300" icon={faImage} />
+                                                    <td className='py-1 pl-2 border-r-2' onClick={()=>console.log('Click variations:', idx)}>
+                                                        <div className='flex flex-row'>
+                                                            <div>
+                                                                <Checkbox color="blue" defaultChecked />
                                                             </div>
-                                                        </div>
-                                                        <div className='flex items-center'>
-                                                            {item.map((subItem, subId) => {
-                                                                return (subItem.length-1 !== subId ? "," : "") + subItem
-                                                            })}
+                                                            <div className='flex flex-row items-center pl-2 text-blue-800'>
+                                                                <div className='flex bg-gray-100 w-10 h-10 rounded items-center justify-center mr-3 hover:bg-blue-300'>
+                                                                    <FontAwesomeIcon className="text-base text-gray-300" icon={faImage} />
+                                                                </div>
+                                                            </div>
+                                                            <div className='flex items-center'>
+                                                                {item.map((subItem, subId) => {
+                                                                    return (subItem.length-1 !== subId ? "," : "") + subItem
+                                                                })}
+                                                            </div>
                                                         </div>
                                                     </td> 
                                                     <td className='py-1 px-2 border-r-2'>
