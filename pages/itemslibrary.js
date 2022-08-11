@@ -56,6 +56,7 @@ const itemslibrary = () => {
         //set item data
         let arr = [...variationsItems]
         let objIndex = arr.findIndex(x => x.id === index)
+        let arr_itemsChecked = arr.filter(x => x.variationsCheckedItem === true)
         
         if(name === 'price') {
             //check mutiple column
@@ -69,7 +70,7 @@ const itemslibrary = () => {
         }
         
         //set checked all
-        let arr_itemsChecked = variationsItems.filter(x => x.variationsCheckedItem === true)
+        arr_itemsChecked = arr.filter(x => x.variationsCheckedItem === true)
         setVariationsCheckedAll(arr_itemsChecked.length > 0 ? true : false)
         setVariationsItems(arr)
     }
@@ -99,9 +100,11 @@ const itemslibrary = () => {
         <div className='flex flex-col w-full h-full'>
             <div className='flex flex-row items-center p-2 grow-0'>
                 <div className="grow">
-                    <Input className="w-72" size="lg" label="Search" />
+                    <div className='w-72'>
+                        <Input size="lg" label="Search" />
+                    </div>
                 </div>
-                <div className="grow-0">
+                <div className="grow-0 space-x-2">
                     <Button onClick={()=>generateingVariations()}>Mock Data</Button>
                     <Button onClick={()=>handleOpenCreateModal()}>Create an Item</Button>
                 </div>
@@ -166,7 +169,7 @@ const itemslibrary = () => {
             </DialogHeader>
             <DialogBody className='overflow-scroll'>
                 {/* Variations Table */}
-                    <div className="container mx-auto">
+                    <div className="container mx-auto border-b-5">
                         <div className='border-b-2 pb-2 font-bold text-gray-800 text-lg'>Variations</div>
                         {
                             variationsItems.length > 0 ?
@@ -255,7 +258,7 @@ const itemslibrary = () => {
                                 </tbody>
                             </table>
                         </div>
-                        <div className='flex flex-row w-full p-2'>
+                        <div className='flex flex-row w-full p-2 mb-5'>
                             <div className='flex-1 p-2'>
                                 <Button className='w-full' onClick={()=>console.log('Add variation')}>Add variation</Button>
                             </div>
