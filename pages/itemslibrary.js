@@ -288,6 +288,7 @@ const itemslibrary = () => {
             </DialogFooter>
         </Dialog>
     </>
-}
+  );
+};
 
-export default itemslibrary
+export default itemslibrary;

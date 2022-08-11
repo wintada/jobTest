@@ -12,7 +12,8 @@ const Sidebar = () => {
     const router = useRouter()
 
     useEffect(() => {
-        setCurrentRoute(router.route)
+        // setCurrentRoute(router.route)
+        setCurrentRoute(router.route.split('/')[1])
     }, [router])
     
     return <>
@@ -21,7 +22,7 @@ const Sidebar = () => {
                 <ul className="space-y-3">
                     <li>
                         <Link href="/">
-                            <div className={`space-x-3 pl-4 p-2 rounded drop-shadow-lg ${ currentRoute === '/' ? 'bg-gray-900' : 'hover:bg-gray-700'}`}>
+                            <div className={`space-x-3 pl-4 p-2 rounded drop-shadow-lg ${ currentRoute === '' ? 'bg-gray-900' : 'hover:bg-gray-700'}`}>
                                 {/* <FontAwesomeIcon className="text-base text-white" icon={faChartLine} /> */}
                                 <a className="self-center text-base whitespace-nowrap text-white">Dashboard</a>
                             </div>
@@ -29,7 +30,7 @@ const Sidebar = () => {
                     </li>
                     <li>
                         <Link href="/items/">
-                            <div className={`space-x-3 pl-4 p-2 rounded drop-shadow-lg ${ currentRoute === '/itemslibrary' ? 'bg-gray-900' : 'hover:bg-gray-700'}`}>
+                            <div className={`space-x-3 pl-4 p-2 rounded drop-shadow-lg ${ currentRoute === 'items' ? 'bg-gray-900' : 'hover:bg-gray-700'}`}>
                                 {/* <FontAwesomeIcon className="text-base text-white" icon={faDrumstickBite} /> */}
                                 <a className="self-center text-base whitespace-nowrap text-white">Items Library</a>
                             </div>
@@ -37,7 +38,7 @@ const Sidebar = () => {
                     </li>
                     <li>    
                         <Link href="/modifiers">
-                            <div className={`space-x-3 pl-4 p-2 rounded drop-shadow-lg ${ currentRoute === '/modifiers' ? 'bg-gray-900' : 'hover:bg-gray-700'}`}>
+                            <div className={`space-x-3 pl-4 p-2 rounded drop-shadow-lg ${ currentRoute === 'modifiers' ? 'bg-gray-900' : 'hover:bg-gray-700'}`}>
                                 {/* <FontAwesomeIcon className="text-base text-white" icon={faBook} /> */}
                                 <a className="self-center text-base whitespace-nowrap text-white">Modifiers</a>
                             </div>
@@ -45,7 +46,7 @@ const Sidebar = () => {
                     </li>
                     <li>
                         <Link href="/cetegories">
-                            <div className={`space-x-3 pl-4 p-2 rounded drop-shadow-lg ${ currentRoute === '/cetegories' ? 'bg-gray-900' : 'hover:bg-gray-700'}`}>
+                            <div className={`space-x-3 pl-4 p-2 rounded drop-shadow-lg ${ currentRoute === 'cetegories' ? 'bg-gray-900' : 'hover:bg-gray-700'}`}>
                                 {/* <FontAwesomeIcon className="text-base text-white" icon={faBook} /> */}
                                 <a className="self-center text-base whitespace-nowrap text-white">Cetegories</a>
                             </div>
@@ -53,7 +54,7 @@ const Sidebar = () => {
                     </li>
                     <li>
                         <Link href="/discounts">
-                            <div className={`space-x-3 pl-4 p-2 rounded drop-shadow-lg ${ currentRoute === '/discounts' ? 'bg-gray-900' : 'hover:bg-gray-700'}`}>
+                            <div className={`space-x-3 pl-4 p-2 rounded drop-shadow-lg ${ currentRoute === 'discounts' ? 'bg-gray-900' : 'hover:bg-gray-700'}`}>
                                 {/* <FontAwesomeIcon className="text-base text-white" icon={faBook} /> */}
                                 <a className="self-center text-base whitespace-nowrap text-white">Discounts</a>
                             </div>
@@ -61,7 +62,7 @@ const Sidebar = () => {
                     </li>
                     <li>
                         <Link href="/options">
-                            <div className={`space-x-3 pl-4 p-2 rounded drop-shadow-lg ${ currentRoute === '/options' ? 'bg-gray-900' : 'hover:bg-gray-700'}`}>
+                            <div className={`space-x-3 pl-4 p-2 rounded drop-shadow-lg ${ currentRoute === 'options' ? 'bg-gray-900' : 'hover:bg-gray-700'}`}>
                                 {/* <FontAwesomeIcon className="text-base text-white" icon={faBook} /> */}
                                 <a className="self-center text-base whitespace-nowrap text-white">Options</a>
                             </div>
@@ -69,7 +70,7 @@ const Sidebar = () => {
                     </li>
                     <li>
                         <Link href="/units">
-                            <div className={`space-x-3 pl-4 p-2 rounded drop-shadow-lg ${ currentRoute === '/units' ? 'bg-gray-900' : 'hover:bg-gray-700'}`}>
+                            <div className={`space-x-3 pl-4 p-2 rounded drop-shadow-lg ${ currentRoute === 'units' ? 'bg-gray-900' : 'hover:bg-gray-700'}`}>
                                 {/* <FontAwesomeIcon className="text-base text-white" icon={faBook} /> */}
                                 <a className="self-center text-base whitespace-nowrap text-white">Units</a>
                             </div>
@@ -77,7 +78,7 @@ const Sidebar = () => {
                     </li>
                     <li>
                         <Link href="/customattributes">
-                            <div className={`space-x-3 pl-4 p-2 rounded drop-shadow-lg ${ currentRoute === '/customattributes' ? 'bg-gray-900' : 'hover:bg-gray-700'}`}>
+                            <div className={`space-x-3 pl-4 p-2 rounded drop-shadow-lg ${ currentRoute === 'customattributes' ? 'bg-gray-900' : 'hover:bg-gray-700'}`}>
                                 {/* <FontAwesomeIcon className="text-base text-white" icon={faBook} /> */}
                                 <a className="self-center text-base whitespace-nowrap text-white">Custom Attributes</a>
                             </div>
