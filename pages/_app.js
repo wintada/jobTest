@@ -1,11 +1,14 @@
 import 'tailwindcss/tailwind.css'
 import Layout from '../components/layout'
+import { RecoilRoot } from 'recoil';
 
 function MyApp({ Component, pageProps }) {
   return <>
-    <Layout>
-      <Component className="overflow-hidden" {...pageProps} />
-    </Layout>
+    <RecoilRoot>
+      <Layout>
+        <Component className="overflow-hidden" {...pageProps} />
+      </Layout>
+    </RecoilRoot>
   </>
 }
 

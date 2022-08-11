@@ -28,7 +28,7 @@ const Sidebar = () => {
                         </Link>
                     </li>
                     <li>
-                        <Link href="/itemslibrary">
+                        <Link href="/items/">
                             <div className={`space-x-3 pl-4 p-2 rounded drop-shadow-lg ${ currentRoute === '/itemslibrary' ? 'bg-gray-900' : 'hover:bg-gray-700'}`}>
                                 {/* <FontAwesomeIcon className="text-base text-white" icon={faDrumstickBite} /> */}
                                 <a className="self-center text-base whitespace-nowrap text-white">Items Library</a>

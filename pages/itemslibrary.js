@@ -34,7 +34,7 @@ const itemslibrary = () => {
     useEffect(() => {
         // generateingVariations()
     }, [])
-
+    
     const generateingVariations = () => {
         const cartesian = (...a) => a.reduce((a, b) => a.flatMap(d => b.map(e => [d, e].flat())))
         let output = []
@@ -69,6 +69,7 @@ const itemslibrary = () => {
             arr[objIndex][name] = type === 'checkbox' ? checked : value
         }
         
+        console.log('test: ', variationsItems)
         //set checked all
         arr_itemsChecked = arr.filter(x => x.variationsCheckedItem === true)
         setVariationsCheckedAll(arr_itemsChecked.length > 0 ? true : false)
