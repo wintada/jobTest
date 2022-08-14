@@ -4,7 +4,7 @@ import { Button, Input } from "@material-tailwind/react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faImage } from '@fortawesome/free-solid-svg-icons'
 
-const itemsList = () => {
+const itemsList = (props) => {
     const mock_data = [
         {id: 0,item: 'a',sku: 'a',cetegory: 'a',locations: 'a',soldby: 'a',stock: 'a',price: 'a'},
         {id: 1,item: 'b',sku: 'b',cetegory: 'b',locations: 'b',soldby: 'b',stock: 'b',price: 'b'},

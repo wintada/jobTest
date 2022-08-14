@@ -10,7 +10,7 @@ import { faX } from '@fortawesome/free-solid-svg-icons'
 import { useRecoilState } from 'recoil';
 import { variations,options,general } from '../../../reducer/items/newItems'
 
-const newItems = () => {
+const newItems = (props) => {
     const mock_options = [{name: 'size', option: ['S','M','L']},{name: 'color', option: ['Red','Green','Blue']},{name: 'sex', option: ['Male','Female']}]
 
     const router = useRouter()
@@ -20,7 +20,7 @@ const newItems = () => {
 
     const submit = () => {
         router.push({pathname: '/items'}, undefined, { shallow: true })
-        console.log('submit', variationsItems)
+        // console.log('submit', variationsItems)
     }
 
     return <>

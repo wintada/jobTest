@@ -7,7 +7,7 @@ import { faImage, faX } from '@fortawesome/free-solid-svg-icons'
 import { useRecoilState } from 'recoil';
 import { options,variations } from '../../../../reducer/items/newItems'
 
-const variationsComponent = () => {
+const variationsComponent = (props) => {
     const [variations_headerColumn, setVariations_headerColumn] = useState([
         {id: 0,name: 'Variation'},
         {id: 1,name: 'SKU'},
@@ -24,7 +24,6 @@ const variationsComponent = () => {
     // }, [])
 
     useEffect(() => {
-        // console.log('optionsItems')
         generateingVariations()
     }, [optionsItems])
 
@@ -87,7 +86,7 @@ const variationsComponent = () => {
     }
 
     return <>
-        <div className="container mx-auto border-b-5">
+        <div className="">
             <div className='border-b-2 pb-2 font-bold text-gray-800 text-lg'>Variations</div>
             {
                 variationsItems.length > 0 ?

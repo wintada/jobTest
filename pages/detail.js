@@ -371,6 +371,7 @@ const Detail = () => {
               {selectedImage && (
                 <div className="pl-3 pt-4">
                   <div className="h-20 w-20 rounded-md border border-gray-300 hover:border-blue-600">
+                    {console.log('selectedImage: ',selectedImage)}
                     <img
                       className="h-12 w-20 pl-2 pr-2 pt-2"
                       src={URL.createObjectURL(selectedImage)}
