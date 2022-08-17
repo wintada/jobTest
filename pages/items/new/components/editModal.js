@@ -1,6 +1,6 @@
 import _ from "lodash"
 import { useEffect, useState } from "react";
-import { Button, Dialog, DialogHeader, DialogBody, DialogFooter, Input, Checkbox } from "@material-tailwind/react";
+import { Button, Dialog, DialogHeader, DialogBody } from "@material-tailwind/react";
 
 // import { useRecoilState } from 'recoil';
 // import { location } from '../../../../reducer/items/newItems'
@@ -11,8 +11,8 @@ import { faX } from '@fortawesome/free-solid-svg-icons'
 const editModal = (props) => {
     const optionColor_row1 = ['gray-300','brown-600','orange-600','yellow-300','green-500']
     const optionColor_row2 = ['blue-400','indigo-700','purple-300','pink-300','red-500']
-    const toggleModal = () => props.handle(!props.open)
     // const [selectedImage, setselectedImage] = useState()
+    const toggleModal = () => props.handle(!props.open)
 
     const handleChange = (element) => {
         const {id,name,value,files} = element.target

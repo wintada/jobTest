@@ -1,9 +1,9 @@
 import { useState } from "react";
 import CreatableSelect from "react-select/creatable";
-import {Button, Dialog, DialogHeader, DialogBody, DialogFooter, Input, Textarea, Typography, Checkbox} from "@material-tailwind/react";
+import { Button, Input, Textarea } from "@material-tailwind/react";
 
 import { useRecoilState } from 'recoil';
-import { category } from '../../../../reducer/items/newItems'
+import { category,newPageCollections } from '../../../../reducer/items/newItems'
 // import LocationModal from "./LocationModal";
 import EditModal from "./editModal";
 
@@ -11,6 +11,7 @@ const detailsComponent = (props) => {
     const mock_category = [{ value: "none", label: "none" }, { value: "chicken", label: "chicken" }, { value: "pork", label: "pork" }]
     const mock_location = [{ value: "example", label: "Example" }, { value: "example1", label: "Example1" }, { value: "example2", label: "Example2" }]
     
+    const [collections, setCollections] = useRecoilState(newPageCollections)
     const [itemCategory, setItemCategory] = useRecoilState(category)
     const [selectedImage, setselectedImage] = useState()
     const [selectedBG, setSelectedBG] = useState()
@@ -22,18 +23,9 @@ const detailsComponent = (props) => {
     const [imageToggle, setImageToggle] = useState(false)
     const [editToggle, setEditToggle] = useState(false)
 
-    // const handleChange_Variations = (element) => {
-    //     const {type,name,value,checked} = element.target
-
-
-    // }
-
-    const removeSelectedImage = () => {
-        setselectedImage()
-    }
+    const removeSelectedImage = () => setselectedImage()
 
     const callback_editModal = (response) => {
-        console.log(response.value)
         if(response.type === 'image') {
             setselectedImage(response.value)
         } else if(response.type === 'color') {
@@ -50,7 +42,6 @@ const detailsComponent = (props) => {
         setItemLocationLable(string)
     }
 
-
     return <>
         <div className="mb-7">
             <div className="mb-7">
@@ -59,7 +50,8 @@ const detailsComponent = (props) => {
             <div className="flex flex-row">
                 <div className="grow space-y-6 px-3">
                     <div>
-                        <Input editdialog="lg" label="item name" onChange={e=>setItemName(e.target.value)}/>
+                        {/* <Input editdialog="lg" label="item name" onChange={e=>setItemName(e.target.value)}/> */}
+                        <Input editdialog="lg" label="item name" onChange={e=>setCollections({...collections, itemName: e.target.value})}/>
                     </div>
                     <div>
                         <CreatableSelect placeholder="Category" options={itemCategory} onChange={setItemLocation}/>

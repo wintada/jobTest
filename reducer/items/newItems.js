@@ -1,10 +1,10 @@
 import { atom } from 'recoil'
 import { v1 } from "uuid"
 
-export const general = atom({
-    key: `general/${v1()}`,
-    default: [],
-})
+// export const general = atom({
+//     key: `general/${v1()}`,
+//     default: [],
+// })
 
 export const category = atom({
     key: `category/${v1()}`,
@@ -31,4 +31,17 @@ export const options = atom({
 export const variations = atom({
     key: `variations/${v1()}`,
     default: [],
+})
+
+export const newPageCollections = atom({
+    key: `newPageCollections/${v1()}`,
+    default: {
+        itemName: '',
+        category: '',
+        description: '',
+        options: [],
+        variations: [],
+        modifier: [],
+        attributes: []
+    },
 })
