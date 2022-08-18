@@ -39,6 +39,7 @@ export const newPageCollections = atom({
         itemName: '',
         category: '',
         description: '',
+        location: [],
         options: [],
         variations: [],
         modifier: [],

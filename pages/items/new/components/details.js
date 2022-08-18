@@ -4,21 +4,20 @@ import { Button, Input, Textarea } from "@material-tailwind/react";
 
 import { useRecoilState } from 'recoil';
 import { category,newPageCollections } from '../../../../reducer/items/newItems'
-// import LocationModal from "./LocationModal";
+import LocationModal from "./LocationModal";
 import EditModal from "./editModal";
 
 const detailsComponent = (props) => {
-    const mock_category = [{ value: "none", label: "none" }, { value: "chicken", label: "chicken" }, { value: "pork", label: "pork" }]
-    const mock_location = [{ value: "example", label: "Example" }, { value: "example1", label: "Example1" }, { value: "example2", label: "Example2" }]
+    // const mock_category = [{ value: "none", label: "none" }, { value: "chicken", label: "chicken" }, { value: "pork", label: "pork" }]
+    // const mock_location = [{ value: "example", label: "Example" }, { value: "example1", label: "Example1" }, { value: "example2", label: "Example2" }]
     
     const [collections, setCollections] = useRecoilState(newPageCollections)
-    const [itemCategory, setItemCategory] = useRecoilState(category)
-    const [selectedImage, setselectedImage] = useState()
-    const [selectedBG, setSelectedBG] = useState()
-    const [itemName, setItemName] = useState('')
-    const [itemLocation, setItemLocation] = useState('')
+    const [categorySet, setCategorySet] = useRecoilState(category)
+    const [selectedImage, setselectedImage] = useState() // BG Image
+    const [selectedBG, setSelectedBG] = useState() // BG Color
     const [itemLocationLable, setItemLocationLable] = useState('')
-
+    const [itemLocation, setItemLocation] = useState('')
+    const [itemName, setItemName] = useState('')
     const [locationToggle, setLocationToggle] = useState(false)
     const [imageToggle, setImageToggle] = useState(false)
     const [editToggle, setEditToggle] = useState(false)
@@ -38,6 +37,7 @@ const detailsComponent = (props) => {
         response.map((item,idx) => {
             string += (idx !== 0 ? ' / ' : '') + item.value
         })
+        setCollections({...collections, location: response})
         setItemLocation(response)
         setItemLocationLable(string)
     }
@@ -51,13 +51,15 @@ const detailsComponent = (props) => {
                 <div className="grow space-y-6 px-3">
                     <div>
                         {/* <Input editdialog="lg" label="item name" onChange={e=>setItemName(e.target.value)}/> */}
-                        <Input editdialog="lg" label="item name" onChange={e=>setCollections({...collections, itemName: e.target.value})}/>
+                        <Input label="item name" onChange={e=>setCollections({...collections, itemName: e.target.value})}/>
                     </div>
                     <div>
-                        <CreatableSelect placeholder="Category" options={itemCategory} onChange={setItemLocation}/>
+                        {/* <CreatableSelect placeholder="Category" options={categorySet} onChange={setItemLocation}/> */}
+                        <CreatableSelect placeholder="Category" options={categorySet} onChange={obj=>setCollections({...collections, category: obj.value})}/>
                     </div>
                     <div>
-                        <Textarea label="Description" onChange={e=>setDescription(e.target.value)}/>
+                    {/* <Textarea label="Description" onChange={e=>setDescription(e.target.value)}/> */}
+                        <Textarea label="Description" onChange={e=>setCollections({...collections, description: e.target.value})}/>
                     </div>
                     <div className="">
                         <header className="w-full border-dashed border border-gray-300 rounded-sm py-3 ">
@@ -76,7 +78,7 @@ const detailsComponent = (props) => {
                         </header>
                     </div>
                     <div className="">
-                        {/* <Input size="lg" label="Locations" value={itemLocationLable} onClick={()=>setLocationToggle(!locationToggle)}/> */}
+                        <Input size="lg" label="Locations" value={itemLocationLable} onClick={()=>setLocationToggle(!locationToggle)}/>
                     </div>
                 </div>
                 <div className="grow-0 px-5">
@@ -98,7 +100,7 @@ const detailsComponent = (props) => {
             </div>
         </div>
 
-        {/* <LocationModal open={locationToggle} handle={setLocationToggle} callback={callback_locationModal} selectItems={itemLocation}/> */}
+        <LocationModal open={locationToggle} handle={setLocationToggle} callback={callback_locationModal} selectItems={itemLocation}/>
         <EditModal open={editToggle} handle={setEditToggle} callback={callback_editModal}/>
     </>
 }

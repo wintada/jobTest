@@ -41,10 +41,8 @@ const TrWrapper = styled.tr`
 const RowHandler = SortableHandle((props) => <div className="flex justify-center items-center w-10 handle">
         {
             props.iconDisabled
-            ?
-                <></>
-            :
-                <FontAwesomeIcon className="text-center text-gray-500" icon={faEllipsis}/>
+            ? <></>
+            : <FontAwesomeIcon className="text-center text-gray-500" icon={faEllipsis}/>
         }
     </div>
 )

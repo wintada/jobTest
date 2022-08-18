@@ -9,50 +9,51 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faX } from '@fortawesome/free-solid-svg-icons'
 
 const locationModal = (props) => {
-    const [locationAtom, setLocationAtom] = useRecoilState(location)
-    const [pickLocation, setPickLocation] = useState([])
-    const [pickLocationAll, setPickLocationAll] = useState(false)
+    const [itemLocation, setItemLocation] = useRecoilState(location)
+    // const [locationAtom, setLocationAtom] = useRecoilState(location)
+    
+    const [locationCheckAll, setLocationCheckAll] = useState(false)
+    const [locationSet, setLocationSet] = useState([])
 
     useEffect(()=> {
         if(props.open === true){
             let arr_selectItemsName = _.cloneDeep([...props.selectItems])
-
-            let arr = _.cloneDeep([...locationAtom])
+            let arr = _.cloneDeep([...itemLocation])
             arr.map(item => {
                 item.checked = arr_selectItemsName.find(x => x.id === item.id) !== undefined ? true : false
             })
             //set checked all
             let arr_itemsChecked = arr.filter(x => x.checked === true)
-            setPickLocationAll((arr_itemsChecked.length === arr.length && arr.length > 0) ? true : false)
-            setPickLocation(arr)
+            setLocationCheckAll((arr_itemsChecked.length === arr.length && arr.length > 0) ? true : false)
+            setLocationSet(arr)
         }
     }, [props.open])
 
     const handleChange = (element, index) => {
         const {name,checked} = element.target
-        let arr = _.cloneDeep([...pickLocation])
+        let arr = _.cloneDeep([...locationSet])
         let objIndex = arr.findIndex(x => x.id === index)
         arr[objIndex].checked = checked
 
         //set checked all
         let arr_itemsChecked = arr.filter(x => x.checked === true)
         // console.log('handleChange: ', arr.filter(x => x.checked === true))
-        setPickLocationAll((arr_itemsChecked.length === arr.length && arr.length > 0) ? true : false)
-        setPickLocation(arr)
+        setLocationCheckAll((arr_itemsChecked.length === arr.length && arr.length > 0) ? true : false)
+        setLocationSet(arr)
     }
 
     const handleCheckAll = (element) => {
         const {checked} = element.target
-        let arr = _.cloneDeep([...pickLocation])
+        let arr = _.cloneDeep([...locationSet])
         arr.map(item => {item.checked = checked})
-        setPickLocation(arr)
-        setPickLocationAll(checked)
+        setLocationSet(arr)
+        setLocationCheckAll(checked)
     }
 
     const toggleModal = () => props.handle(!props.open)
 
     const prepareBeforeCallback = () => {
-        let arr = _.cloneDeep([...pickLocation]) || []
+        let arr = _.cloneDeep([...locationSet]) || []
         let output = []
         if(arr.length > 0) {
             output = arr.filter(x => x.checked === true)
@@ -86,11 +87,11 @@ const locationModal = (props) => {
                             }/>
                         </div>
                         <div className="flex items-center border-b-2 py-2">
-                            <Checkbox checked={pickLocationAll} onChange={e=>{handleCheckAll(e)}}/>
+                            <Checkbox checked={locationCheckAll} onChange={e=>{handleCheckAll(e)}}/>
                             Location
                         </div>
                         {
-                            pickLocation.map((item, idx) => {
+                            locationSet.map((item, idx) => {
                                 return <div className="flex items-center pt-3" key={idx}>
                                     <Checkbox checked={item.checked} onChange={e=>{handleChange(e, item.id)}}/>
                                     {item.value}
@@ -99,14 +100,6 @@ const locationModal = (props) => {
                         }
                     </div>
                 </DialogBody>
-            {/* <DialogFooter>
-                <Button variant="text" color="red" onClick={()=>toggleModal()} className="mr-1">
-                    <span>Cancel</span>
-                </Button>
-                <Button variant="gradient" color="green" onClick={()=>prepareBeforeCallback()} id="locationbtn">
-                    <span>Confirm</span>
-                </Button>
-            </DialogFooter> */}
         </Dialog>
     </>
 }

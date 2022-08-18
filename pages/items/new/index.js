@@ -3,7 +3,9 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from "react";
 import DetailsComponent from "./components/details";
 import OptionsComponent from './components/options';
+import Modifier from './components/Modifier';
 import VariationsComponent from "./components/variations";
+import CustomAttributes from './components/customAttributes';
 import { Button, Dialog, DialogHeader, DialogBody } from "@material-tailwind/react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faX } from '@fortawesome/free-solid-svg-icons'
@@ -55,6 +57,9 @@ const newItems = (props) => {
                     <DetailsComponent />
                     <OptionsComponent />
                     <VariationsComponent />
+                    <Modifier />
+                    <CustomAttributes />
+                    <div className="m-2 opacity-0">dummy</div>
                 </div>
             </DialogBody>
         </Dialog>

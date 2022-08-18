@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react'
-import { Button, Checkbox } from "@material-tailwind/react";
+import { Button, Checkbox, Input, Select, Option } from "@material-tailwind/react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faImage, faX } from '@fortawesome/free-solid-svg-icons'
+import EditVariationModal from './editVariationModal';
 
 import { useRecoilState } from 'recoil';
-import { options,variations,newPageCollections } from '../../../../reducer/items/newItems'
+import { options,variations,location,newPageCollections } from '../../../../reducer/items/newItems'
 
 const variationsComponent = (props) => {
     const [collections, setCollections] = useRecoilState(newPageCollections)
+    const [locationSet, setLocationSet] = useRecoilState(location)
     const [variations_headerColumn, setVariations_headerColumn] = useState([
         {id: 0,name: 'Variation'},
         {id: 1,name: 'SKU'},
@@ -18,26 +20,20 @@ const variationsComponent = (props) => {
     const [variationsCheckedAll, setVariationsCheckedAll] = useState(false)
     const [optionsItems, setOptionItems] = useRecoilState(options)
 
+    const [overrideToggle, setOverrideToggle] = useState(false)
+    const [editVariationToggle, setEditVariationToggle] = useState(false)
+
     useEffect(() => {
         initialData()
-        // crossCheckOptions()
+        if(collections.variations.length > 0) setOverrideToggle(false)
     }, [collections.variations])
 
-    // const generateingVariations = () => {
-    //     const cartesian = (...a) => a.reduce((a, b) => a.flatMap(d => b.map(e => [d, e].flat())))
-    //     let output = []
-    //     let mainArray = []
-    //     if(optionsItems.length > 0) {
-    //         optionsItems.map(item => {
-    //             mainArray.push(item.option)
-    //         })
-    
-    //         cartesian(...mainArray).map((item, idx)=> {
-    //             output.push({id: idx,variant: item, sku: '', price: '', location: '',variationsCheckedItem: false,openPriceCol: false})
-    //         })
-    //     }
-    //     setVariationsItems(output)
-    // }
+
+    useEffect(() => {
+        if(overrideToggle === false) {
+            //Clear Data Of Price Override
+        }
+    },[overrideToggle])
 
     const initialData = () => {
         let arr = _.cloneDeep({...collections})
@@ -127,12 +123,63 @@ const variationsComponent = (props) => {
         setVariationsCheckedAll(checked)
     }
 
+    const callback_editVariationModal = () => {
+
+    }
+
     return <>
-        <div className="">
-            <div className='border-b-2 pb-2 font-bold text-gray-800 text-lg'>Variations</div>
+        <div className="mb-7">
+            <div className='flex flex-row border-b-2 pb-2 justify-between'>
+                <div className='font-bold text-gray-800 text-lg'>Variations</div>
+                <Button className='p-1' variant="text" onClick={()=>setEditVariationToggle(!editVariationToggle)}>Edit variation details</Button>
+            </div>
             {
-                variationsItems.length > 0 ?
-                    <div className='flex flex-row text-gray-800 font-normal items-center border-b-2 py-1'>
+                variationsItems.length <= 0 ?
+                    <div className='mt-5 space-y-5'>
+                        <div>
+                            <Input label="SKU"/>
+                        </div>
+                        <div className='flex flex-row'>
+                            <div className='grow pr-2'>
+                                <Select className="" label="Unit">
+                                    <Option>Per Item</Option>
+                                    <Option>Per Hour (Add Unit)</Option>
+                                    <Option>Per Liter (Add Unit)</Option>
+                                    <Option>Per Ounce (Add Unit)</Option>
+                                    <Option>Per Pound (Add Unit)</Option>
+                                    <Option>Per Yard (Add Unit)</Option>
+                                </Select>
+                            </div>
+                            <div className='grow pl-2'>
+                                <Input label="Price"/>
+                            </div>
+                        </div>
+                        {
+                            overrideToggle ?
+                                <div className='flex flex-row'>
+                                    <div className='grow pr-2'>
+                                        <Input label="Price Override"/>
+                                    </div>
+                                    <div className='grow pl-2'>
+                                        <Select className="" label="Location">
+                                            {
+                                                locationSet.map((item, idx) => {
+                                                    return <Option key={idx}>{item.value}</Option>
+                                                })
+                                            }
+                                        </Select>
+                                    </div>
+                                </div>
+                            :
+                                <></>
+                        }
+                        <div className='flex items-center justify-end'>
+                            <Button className='p-1' variant="text" onClick={()=>setOverrideToggle(!overrideToggle)}>{overrideToggle ? 'Close' : 'Add' } price override</Button> |
+                            <Button className='p-1' variant="text" onClick={()=>setOverrideToggle(!overrideToggle)}>Manage stock</Button>
+                        </div>
+                    </div>
+                :
+                     <div className='flex flex-row text-gray-800 font-normal items-center border-b-2 py-1'>
                         <div className=''>
                             <Checkbox onChange={e=>{handleCheckAll(e)}} checked={variationsCheckedAll}/>
                         </div>
@@ -153,8 +200,6 @@ const variationsComponent = (props) => {
                                 <></>
                         }
                     </div>
-                :
-                    <></>
             }
             {
                 collections.options.length > 0 ?
@@ -235,8 +280,9 @@ const variationsComponent = (props) => {
                 :
                     <></>
             }
-           
-        </div>            
+        </div>       
+
+        <EditVariationModal open={editVariationToggle} handle={setEditVariationToggle} callback={callback_editVariationModal}/>     
     </>
 }
 
