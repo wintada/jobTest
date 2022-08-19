@@ -9,7 +9,7 @@ import { faX ,faEllipsis} from '@fortawesome/free-solid-svg-icons'
 import { useRecoilState } from 'recoil';
 import { options, newPageCollections } from '../../../../reducer/items/newItems'
 
-import AddOptionsModal from "./optionModal";
+import OptionsModal from "./optionModal";
 import CreateVariationsModal from "./createVariationsModal";
 
 import { SortableHandle, SortableContainer, SortableElement } from "react-sortable-hoc"
@@ -65,7 +65,7 @@ const SortableItem = SortableElement(props => {
                             }
                         </div>
                     </div>
-                    <div className="grow-0 w-20 text-blue-300">
+                    <div className="grow-0 w-20 text-blue-300" onClick={()=>props.editToggle()}>
                         Edit
                     </div>
                     <div className="grow-0 w-10">
@@ -80,15 +80,17 @@ const SortableItem = SortableElement(props => {
 })
 
 const optionsComponent = (props) => {
-
     const [collections, setCollections] = useRecoilState(newPageCollections)
     const [optionsAtom, setOptionsAtom] = useRecoilState(options)
-
+    
     const [createVariationsToggle, setCreateVariationsToggle] = useState(false)
-    const [addOptionsToggle, setAddOptionsToggle] = useState(false)
-
+    
+    const [optionsToggle, setOptionsToggle] = useState(false)
+    const [optionsModalMode, setOptionsModalMode] = useState('Add')
+    
     const [backupOptionsData, setBackupOptionsData] = useState({})
     const [option_rawdata, setOption_rawdata] = useState([])
+    // const [recentlyOption, setRecentlyOption] = useState()
 
     const callback_optionModal = (response) => {
         let updated = false
@@ -101,9 +103,10 @@ const optionsComponent = (props) => {
         })
         if(!updated) arr.options.push({name: response.name, option: response.option})
 
+        console.log("callback_optionModal", arr.options)
         setOption_rawdata(arr.options)
         setBackupOptionsData(response)
-        setAddOptionsToggle(!addOptionsToggle)
+        setOptionsToggle(!optionsToggle)
         setCreateVariationsToggle(!createVariationsToggle)
     }
 
@@ -117,7 +120,12 @@ const optionsComponent = (props) => {
 
     const backstep = () => {
         setCreateVariationsToggle(!createVariationsToggle)
-        setAddOptionsToggle(!addOptionsToggle)
+        setOptionsToggle(!optionsToggle)
+    }
+
+    const editToggle = () => {
+        setOptionsModalMode('Edit')
+        setOptionsToggle(!optionsToggle)
     }
 
     const removeItem = () => {
@@ -160,6 +168,7 @@ const optionsComponent = (props) => {
                                             index={index}
                                             value={item}
                                             removeItem={removeItem}
+                                            editToggle={editToggle}
                                         />
                                     ))}
                                 </SortableCont>
@@ -170,7 +179,8 @@ const optionsComponent = (props) => {
                     <div className="flex pt-5 justify-center">
                         <Button className="w-5/6 bg-gray-200 border-gray-50 text-indigo-500" variant="outlined" onClick={()=>{
                             setBackupOptionsData({})
-                            setAddOptionsToggle(!addOptionsToggle)
+                            setOptionsModalMode('Add')
+                            setOptionsToggle(!optionsToggle)
                         }}>
                             Add Options
                         </Button>
@@ -179,7 +189,7 @@ const optionsComponent = (props) => {
             </div>
         </div>
 
-        <AddOptionsModal open={addOptionsToggle} handle={setAddOptionsToggle} backupOptionsData={backupOptionsData} callback={callback_optionModal}/>
+        <OptionsModal open={optionsToggle} handle={setOptionsToggle} backupOptionsData={backupOptionsData} mode={optionsModalMode} callback={callback_optionModal}/>
         <CreateVariationsModal open={createVariationsToggle} handle={setCreateVariationsToggle} backstep={backstep} rawdata={option_rawdata} callback={callback_createVariationsModal}/>
     </>
 }

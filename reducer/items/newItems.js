@@ -1,11 +1,6 @@
 import { atom } from 'recoil'
 import { v1 } from "uuid"
 
-// export const general = atom({
-//     key: `general/${v1()}`,
-//     default: [],
-// })
-
 export const category = atom({
     key: `category/${v1()}`,
     default: [
@@ -23,13 +18,18 @@ export const location = atom({
     ],
 })
 
+export const variations = atom({
+    key: `variations/${v1()}`,
+    default: [],
+})
+
 export const options = atom({
     key: `options/${v1()}`,
     default: [],
 })
 
-export const variations = atom({
-    key: `variations/${v1()}`,
+export const tempOption = atom({
+    key: `tempOption/${v1()}`,
     default: [],
 })
 

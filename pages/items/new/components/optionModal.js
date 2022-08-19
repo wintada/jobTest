@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faX ,faEllipsis} from '@fortawesome/free-solid-svg-icons'
 
 import { useRecoilState } from 'recoil'
-import { options } from '../../../../reducer/items/newItems'
+import { options, tempOption } from '../../../../reducer/items/newItems'
 
 import { SortableHandle, SortableContainer, SortableElement } from "react-sortable-hoc"
 import arrayMove from "../../../../components/arrayMove"
@@ -70,10 +70,11 @@ const SortableItem = SortableElement(props => {
         </TrWrapper>
 })
 
-const noderef = React.createRef(null)
 const selectOption = React.createRef(null)
 const newItem = React.createRef(null)
-const addOptionsModal = (props) => {
+
+const optionsModal = (props) => {
+    // const [recentlyOption, setRecentlyOption] = useRecoilState(tempOption)
     const [optionsAtom, setOptionsAtom] = useRecoilState(options)
     const [optionsSet, setOptionsSet] = useState([])
     const [optionName, setOptionName] = useState()
@@ -99,6 +100,11 @@ const addOptionsModal = (props) => {
         let arr = _.cloneDeep([...optionsAtom])
         obj = arr.find(x => x.name === optionName)
         setOptionList(obj !== undefined ? obj.option : [])
+
+        // const { name, option } = props.backupOptionsData
+        // if(name !== undefined && option!== undefined) {
+        //     setOptionList(option !== undefined ? option : [])
+        // }
     }, [optionName])
 
     useEffect(() => {
@@ -137,7 +143,7 @@ const addOptionsModal = (props) => {
                         <FontAwesomeIcon className="text-base text-gray-500" icon={faX} />
                     </Button>
                 </div>
-                <div>Add options</div>
+                <div>{props.mode} options</div>
                 <div className="w-16"/>
             </DialogHeader>
             <DialogBody className="overflow-scroll" style={{maxHeight: '75vh'}} divider>
@@ -148,7 +154,7 @@ const addOptionsModal = (props) => {
                             <div className="grow-0 pl-2 text-gray-700 font-bold">Option set name</div>
                         </div>
                         <div className="grow">
-                            <CreatableSelect ref={selectOption} placeholder="Search" options={optionsSet} onChange={e=>setOptionName(e.value)} value={{value: optionName, label: optionName}}/>
+                            <CreatableSelect ref={selectOption} placeholder="Search" options={optionsSet} onChange={e=>setOptionName(e.value)} value={{value: optionName, label: optionName}} isDisabled={props.mode === 'Edit' ? true : false}/>
                         </div>
                     </div>
                     {
@@ -221,4 +227,4 @@ const addOptionsModal = (props) => {
     </>
 }
 
-export default addOptionsModal
+export default optionsModal

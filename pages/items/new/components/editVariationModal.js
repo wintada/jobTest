@@ -17,13 +17,21 @@ const actionSet = [
 ]
 
 const editVariationModal = (props) => {
-    // location
-    const [itemLocation, setItemLocation] = useRecoilState(location)
-    const [stockAction, setStockAction] = useState('received')
+    const [locationAtom, setLocationAtom] = useRecoilState(location)
+    const [itemLocation, setItemLocation] = useState([])
+    // const [stockAction, setStockAction] = useState('received')
     const [selectedImage, setselectedImage] = useState()
     const [checkedAll, setCheckedAll] = useState(false)
 
-    const toggleModal = () => props.handle(!props.open)
+    useEffect(() => {
+        let arr = _.cloneDeep([...locationAtom])
+        arr.map(item => { 
+            item.action = 'received'
+        })
+        setItemLocation(arr)
+    }, [locationAtom])
+
+    const toggleModal = () => props.handle(!props.open) 
 
     const removeSelectedImage =() => {
         
@@ -31,6 +39,12 @@ const editVariationModal = (props) => {
 
     const prepareDataBeforeCallback = () => {
         toggleModal()
+    }
+
+    const selectAction = (value,index) => {
+        let arr = _.cloneDeep([...itemLocation])
+        arr[index].action = value
+        setItemLocation(arr)
     }
 
     return <>
@@ -47,7 +61,7 @@ const editVariationModal = (props) => {
             <DialogBody className="overflow-scroll" style={{maxHeight: '75vh'}} divider>
                 <div className="w-full">
                     <div>
-                        <Tabs value="details">
+                        <Tabs value={props.setTabs}>
                             <TabsHeader>
                                 <Tab value={"details"}>Details</Tab>
                                 <Tab value={"managestock"}>Manage stock</Tab>
@@ -121,16 +135,15 @@ const editVariationModal = (props) => {
                                                                             <Switch label="Tracking" />
                                                                         </div>
                                                                         <div className="p-2 mt-2 space-y-3">
-                                                                            <Select className="bg-gray-50" label="Stock Action" onChange={e=>console.log(e)}>
+                                                                            <Select className="bg-gray-50" label="Stock Action" value={item.action} onChange={e=>selectAction(e,idx)}>
                                                                                 {
                                                                                     actionSet.map((item, idx) => {
-                                                                                        return <Option key={idx}>{item.action}</Option>
+                                                                                        return <Option key={idx} value={item.value}>{item.action}</Option>
                                                                                     })
                                                                                 }
                                                                             </Select>
-                                                                            {console.log(actionSet.find(x => x.action === stockAction))}
-                                                                            <Input className="bg-gray-50" label={actionSet.find(x => x.action === stockAction)}/>
-                                                                            <Input className="bg-gray-50" label="Stock"/>
+                                                                            <Input className="bg-gray-50" label={actionSet.find(x => x.value === item.action).prefix1}/>
+                                                                            <Input className="bg-gray-50" label={actionSet.find(x => x.value === item.action).prefix2}/>
                                                                         </div>
                                                                     </div>
                                                                 })

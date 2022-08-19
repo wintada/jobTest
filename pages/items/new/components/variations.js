@@ -22,6 +22,7 @@ const variationsComponent = (props) => {
 
     const [overrideToggle, setOverrideToggle] = useState(false)
     const [editVariationToggle, setEditVariationToggle] = useState(false)
+    const [editmodalSelectedTab, setEditmodalSelectedTab] = useState('details')
 
     useEffect(() => {
         initialData()
@@ -124,14 +125,14 @@ const variationsComponent = (props) => {
     }
 
     const callback_editVariationModal = () => {
-
+        
     }
 
     return <>
         <div className="mb-7">
             <div className='flex flex-row border-b-2 pb-2 justify-between'>
                 <div className='font-bold text-gray-800 text-lg'>Variations</div>
-                <Button className='p-1' variant="text" onClick={()=>setEditVariationToggle(!editVariationToggle)}>Edit variation details</Button>
+                <Button className='p-1' variant="text" onClick={()=>{setEditmodalSelectedTab("details"); setEditVariationToggle(!editVariationToggle)}}>Edit variation details</Button>
             </div>
             {
                 variationsItems.length <= 0 ?
@@ -175,7 +176,7 @@ const variationsComponent = (props) => {
                         }
                         <div className='flex items-center justify-end'>
                             <Button className='p-1' variant="text" onClick={()=>setOverrideToggle(!overrideToggle)}>{overrideToggle ? 'Close' : 'Add' } price override</Button> |
-                            <Button className='p-1' variant="text" onClick={()=>setOverrideToggle(!overrideToggle)}>Manage stock</Button>
+                            <Button className='p-1' variant="text" onClick={()=>{setEditmodalSelectedTab("managestock"); setEditVariationToggle(!editVariationToggle)}}>Manage stock</Button>
                         </div>
                     </div>
                 :
@@ -270,7 +271,7 @@ const variationsComponent = (props) => {
                                 <Button className='w-full bg-gray-200 border-gray-50 text-indigo-500' onClick={()=>console.log('Add variation')}>Add variation</Button>
                             </div>
                             <div className='flex-1 p-2'>
-                                <Button className='w-full bg-gray-200 border-gray-50 text-indigo-500' onClick={()=>console.log('Manage stock')}>Manage stock</Button>
+                                <Button className='w-full bg-gray-200 border-gray-50 text-indigo-500' onClick={()=>{setEditmodalSelectedTab("managestock"); setEditVariationToggle(!editVariationToggle)}}>Manage stock</Button>
                             </div>
                             <div className='flex-1 p-2'>
                                 <Button className='w-full bg-gray-200 border-gray-50 text-indigo-500' onClick={()=>console.log('Edit Stock Trcking')}>Edit Stock Trcking</Button>
@@ -282,7 +283,7 @@ const variationsComponent = (props) => {
             }
         </div>       
 
-        <EditVariationModal open={editVariationToggle} handle={setEditVariationToggle} callback={callback_editVariationModal}/>     
+        <EditVariationModal open={editVariationToggle} handle={setEditVariationToggle} setTabs={editmodalSelectedTab} callback={callback_editVariationModal}/>     
     </>
 }
 
