@@ -7,6 +7,7 @@ import {
   DialogFooter,
   Input,
   Checkbox,
+  Alert,
 } from "@material-tailwind/react";
 
 import { useEffect } from "react";
@@ -18,6 +19,7 @@ const AllowMultipleModal = (props) => {
   const [inputText, setInputText] = useState("");
   const [filter, setFilter] = useState([]);
   const [newarr, setNewarr] = useState([]);
+  const [namealert, setNamealert] = useState(false);
 
   let inputHandler = (e) => {
     var lowerCase = e.target.value.toLowerCase();
@@ -30,10 +32,6 @@ const AllowMultipleModal = (props) => {
       return el.value.toLowerCase().includes(inputText);
     }
   });
-  console.log("filter", filter);
-  console.log("newarr", newarr);
-
-  // let filterD = props.dataArr.filter((x) => x !== "");
 
   const push = (e) => {
     let count1 = newarr[newarr.length - 1].id + 1;
@@ -44,8 +42,26 @@ const AllowMultipleModal = (props) => {
     }
   };
 
+  console.log("arrmulti", arrmulti, "newwwarr", newarr);
+
+  useEffect(() => {
+    let valueArr = filteredData.map((item) => item.value);
+    let isDuplicate = valueArr.some(
+      (item, index) => valueArr.indexOf(item) != index
+    );
+    console.log(isDuplicate);
+    if (isDuplicate == true) {
+      setNamealert(true);
+    } else if (isDuplicate !== true) {
+      setNamealert(false);
+    }
+  }, [push]);
+
+  // let filterD = props.dataArr.filter((x) => x !== "");
+
   useEffect(() => {
     setFilter(props.dataArr);
+
     setNewarr([...props.dataArr, ...arrmulti]);
   }, [props.open, arrmulti]);
 
@@ -62,12 +78,12 @@ const AllowMultipleModal = (props) => {
   const handleChange = (e) => {
     const { name, checked } = e.target;
     if (name === "allSelect") {
-      let tempUser = filteredData.map((user) => {
+      let tempUser = newarr.map((user) => {
         return { ...user, isChecked: checked };
       });
       setNewarr(tempUser);
     } else {
-      let tempUserold = filteredData.map((item) =>
+      let tempUserold = newarr.map((item) =>
         item.id == name ? { ...item, isChecked: checked } : item
       );
       setNewarr(tempUserold);
@@ -98,7 +114,30 @@ const AllowMultipleModal = (props) => {
           <div>{props.name}</div>
           <div className="w-16" />
         </DialogHeader>
-
+        {namealert ? (
+          <div>
+            <Alert
+              className="text-center text-sm"
+              color="red"
+              icon={
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  className="bi bi-exclamation-triangle-fill ml-[9rem]"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                </svg>
+              }
+            >
+              Each value must have a unique name.
+            </Alert>
+          </div>
+        ) : (
+          <></>
+        )}
         <DialogBody
           className="overflow-auto  h-auto"
           style={{ maxHeight: "75vh" }}

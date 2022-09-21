@@ -13,6 +13,7 @@ import {
   Input,
   Radio,
   Switch,
+  Alert,
 } from "@material-tailwind/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX, faEllipsis } from "@fortawesome/free-solid-svg-icons";
@@ -44,7 +45,7 @@ const addCustomAttributes = (props) => {
   const [Text, setText] = useState("");
   const [item, setItem] = useState([{}]);
   const [AllowSingle, setAllowSingle] = useState(false);
-  const [AllowMultiple, setAllowMultiple] = useState(false);
+  const [AllowMultiple, setAllowMultiple] = useState(true);
   const [Quatity, setQuatity] = useState("");
   const [arr, setArr] = useState([]);
   const [selectArray, setselectArray] = useState([]);
@@ -56,15 +57,26 @@ const addCustomAttributes = (props) => {
   const [boxselection, setBoxselection] = useState("");
   const [count1, setCount1] = useState(0);
   const [state, setState] = useState("");
+  const [namealert, setNamealert] = useState(false);
 
-  const start = 0;
+  const editNew = (e, index) => {
+    const { value } = e.target;
+    let editarr = _.cloneDeep([...arr]);
+    let obj = editarr.find((x) => x.value === x.value);
+    if (obj !== undefined) {
+      arr[index].value = value;
+    }
+    setArr(arr);
+  };
 
-  const blur = (e) => {
-    const val = e.target.value;
-    // if (val.length > 0) {
-    e.target.value = Number(val).toFixed(numbervalue);
-    setState(e.target.value);
-    // }
+  const numfix = (e) => {
+    let val = e.target.value;
+    let re = val.match(/(\d+).(\d{0,1})/g);
+    if (val !== "") {
+      val = parseFloat(val).toFixed(numbervalue);
+    }
+    console.log("re", re);
+    setState(val);
   };
 
   const push1 = (e) => {
@@ -77,10 +89,30 @@ const addCustomAttributes = (props) => {
     }
   };
 
+  console.log("arr", arr);
+
+  useEffect(() => {
+    // const checkvalue = () => {
+
+    // };
+    let valueArr = arr.map((item) => item.value);
+    let isDuplicate = valueArr.some(
+      (item, index) => valueArr.indexOf(item) != index
+    );
+    // console.log(isDuplicate);
+    if (isDuplicate == true) {
+      setNamealert(true);
+    } else if (isDuplicate !== true) {
+      setNamealert(false);
+    }
+    // return checkvalue;
+  }, [push1]);
+
   const removeItem = (item) => {
     if (boxselection.value !== "") {
       const remove = arr.filter((x) => x.id !== item);
       setArr([...remove]);
+
       console.log("new remove", arr);
     }
   };
@@ -142,6 +174,30 @@ const addCustomAttributes = (props) => {
           <div>Add custom attribute</div>
           <div className="w-16" />
         </DialogHeader>
+        {namealert ? (
+          <div>
+            <Alert
+              className="text-center text-sm"
+              color="red"
+              icon={
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  className="bi bi-exclamation-triangle-fill ml-[9rem]"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                </svg>
+              }
+            >
+              Each value must have a unique name.
+            </Alert>
+          </div>
+        ) : (
+          <></>
+        )}
         <DialogBody
           className="overflow-auto  h-96"
           style={{ maxHeight: "75vh" }}
@@ -275,7 +331,7 @@ const addCustomAttributes = (props) => {
                   <br></br>
                   <br></br>
                   <div>
-                    <header className="w-[35.2rem] border border-gray-300 h-28 flex flex-row ">
+                    <header className=" border border-gray-300 h-28 flex flex-row ">
                       <div className="bg-gray-200 py-3 pr-[120px] pl-4 text-gray-700 font-bold text-sm pb-20">
                         <Typography variant="h6">Quantity </Typography>
                       </div>
@@ -286,7 +342,10 @@ const addCustomAttributes = (props) => {
                             name="type"
                             label="Allow multiple selections"
                             defaultChecked
-                            onClick={() => setAllowMultiple(!AllowMultiple)}
+                            onClick={() => {
+                              setAllowMultiple(!AllowMultiple);
+                              setAllowSingle(false);
+                            }}
                           />
                         </div>
                         <div class="flex items-center ">
@@ -294,7 +353,10 @@ const addCustomAttributes = (props) => {
                             id="Allow single"
                             name="type"
                             label="Allow single selection"
-                            onClick={() => setAllowSingle(!AllowSingle)}
+                            onClick={() => {
+                              setAllowSingle(!AllowSingle);
+                              setAllowMultiple(false);
+                            }}
                           />
                         </div>
                       </div>
@@ -316,7 +378,13 @@ const addCustomAttributes = (props) => {
                     {arr.map((item, index) => {
                       return (
                         <div className="h-11 flex items-center border-y-2 border-x-2 pl-6  flex-row">
-                          {item.value}
+                          <input
+                            className="focus:outline-none"
+                            defaultValue={item.value}
+                            onChange={(e) => editNew(e, index)}
+                            size="lg"
+                            type="text"
+                          />
                           <div className="w-full flex justify-end pr-2">
                             <button
                               type="submit"
@@ -401,7 +469,7 @@ const addCustomAttributes = (props) => {
               {numberatt ? (
                 <div>
                   <div
-                    className={` flex flex-row items-center border border-gray-300 p-3 bg-gray-200  'mt-2 rounded-t-lg' : 'my-2 rounded'`}
+                    className={`overflow-y-auto  flex flex-row items-center border border-gray-300 p-3 bg-gray-200  'mt-2 rounded-t-lg' : 'my-2 rounded'`}
                   >
                     <div className="grow-0 w-48 ">
                       <div className="grow-0 pl-2 text-gray-700 font-bold ">
@@ -409,7 +477,7 @@ const addCustomAttributes = (props) => {
                       </div>
                     </div>
                     <div className="grow flex flex-row-reverse ">
-                      <div className="w-full bg-white">
+                      <div className="w-full bg-white ">
                         <Select
                           size="lg"
                           onChange={(e) => setnumbervalue(e)}
@@ -435,9 +503,9 @@ const addCustomAttributes = (props) => {
                     <div className="grow flex flex-row-reverse">
                       <div className="w-full bg-white">
                         <input
+                          className="focus:outline-none "
                           type="text"
-                          onChange={(e) => blur(e)}
-                          // onBlur={blur}
+                          onChange={(e) => numfix(e)}
                           value={state}
                         />
                       </div>
@@ -453,7 +521,7 @@ const addCustomAttributes = (props) => {
                 <div>
                   <br></br>
                   <br></br>
-                  <div className="w-[35.2rem] border border-gray-300 h-14 flex flex-row ">
+                  <div className=" border border-gray-300 h-14 flex flex-row ">
                     <div className="bg-gray-200 py-3 w-52 pr-[120px] pl-4 text-gray-700 font-bold text-sm ">
                       <Typography variant="h6">Value</Typography>
                     </div>
