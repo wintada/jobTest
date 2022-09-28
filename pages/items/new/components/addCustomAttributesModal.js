@@ -49,8 +49,7 @@ const addCustomAttributes = (props) => {
   const [Quatity, setQuatity] = useState("");
   const [arr, setArr] = useState([]);
   const [selectArray, setselectArray] = useState([]);
-  const [numbervalue, setnumbervalue] = useState("");
-  const [textnumber, setText1] = useState("");
+  const [numbervalue, setnumbervalue] = useState(0);
   const [collections, setCollections] = useRecoilState(newPageCollections);
   const [variationsItems, setVariationsItems] = useState([]);
   const [openModal, setopenModal] = useState(false);
@@ -69,57 +68,46 @@ const addCustomAttributes = (props) => {
     setArr(arr);
   };
 
-  const numfix = (e) => {
+  const tofix = (e) => {
     let val = e.target.value;
-    let re = val.match(/(\d+).(\d{0,1})/g);
-    if (val !== "") {
-      val = parseFloat(val).toFixed(numbervalue);
-    }
-    console.log("re", re);
-    setState(val);
+    val = val.replace(/([^0-9.]+)/, "");
+    val = val.replace(/^(0|\.)/, "");
+    const re = new RegExp(`(\\d{0,10})[^.]*((?:.\\d{0,${numbervalue}})?)`, "g");
+    const newStr = re.exec(val);
+    const value = newStr[1] + newStr[2];
+    e.target.value = value;
+    setState(value);
   };
 
   const push1 = (e) => {
     if (boxselection !== "") {
       arr.push({ id: count1, value: boxselection });
       setArr([...arr]);
-      // console.log("arr==>", arr);
+
       setBoxselection("");
       setCount1(count1 + 1);
     }
   };
 
-  console.log("arr", arr);
-
   useEffect(() => {
-    // const checkvalue = () => {
-
-    // };
     let valueArr = arr.map((item) => item.value);
     let isDuplicate = valueArr.some(
       (item, index) => valueArr.indexOf(item) != index
     );
-    // console.log(isDuplicate);
     if (isDuplicate == true) {
       setNamealert(true);
     } else if (isDuplicate !== true) {
       setNamealert(false);
     }
-    // return checkvalue;
   }, [push1]);
 
   const removeItem = (item) => {
     if (boxselection.value !== "") {
       const remove = arr.filter((x) => x.id !== item);
       setArr([...remove]);
-
       console.log("new remove", arr);
     }
   };
-
-  const count = Number(textnumber);
-  let number = null;
-  number = count.toFixed(numbervalue);
 
   const handleChange = () => {
     let arr = _.cloneDeep([...variationsItems]);
@@ -136,8 +124,13 @@ const addCustomAttributes = (props) => {
     setText("");
     setQuatity("");
     setToggle(Boolean);
-    setText1("");
-  }, [item]);
+    setArr([]);
+    setToggle(false);
+    setTextatt(false);
+    setSelectionatt(false);
+    setNumberatt(false);
+    setToggleatt(false);
+  }, [item, !props.open]);
   const dataText = [
     {
       nameAttribute,
@@ -149,18 +142,12 @@ const addCustomAttributes = (props) => {
     },
   ];
 
-  useEffect(() => {
-    if (props.open) {
-    } else {
-    }
-  }, [props.open]);
-
   const selectAttribute = React.createRef(null);
   let filter = arr.filter((x) => x.value != "");
 
   return (
     <>
-      <Dialog open={props.open} handler={() => toggleModal()} size="md">
+      <Dialog open={props.open} /* handler={toggleModal} */ size="md">
         <DialogHeader className="flex justify-between">
           <div>
             <Button
@@ -469,44 +456,47 @@ const addCustomAttributes = (props) => {
               {numberatt ? (
                 <div>
                   <div
-                    className={`overflow-y-auto  flex flex-row items-center border border-gray-300 p-3 bg-gray-200  'mt-2 rounded-t-lg' : 'my-2 rounded'`}
+                    className={`flex flex-row items-center border border-gray-300 p-3 bg-gray-200  'mt-2 rounded-t-lg' : 'my-2 rounded'`}
                   >
-                    <div className="grow-0 w-48 ">
+                    <div className="h-10 flex items-center grow-0 w-48 ">
                       <div className="grow-0 pl-2 text-gray-700 font-bold ">
                         <Typography variant="h6">Precision</Typography>
                       </div>
                     </div>
                     <div className="grow flex flex-row-reverse ">
-                      <div className="w-full bg-white ">
-                        <Select
+                      <div className=" w-full bg-white ">
+                        <select
+                          className="h-10 w-full"
                           size="lg"
-                          onChange={(e) => setnumbervalue(e)}
+                          onChange={(e) => setnumbervalue(e.target.value)}
                           label="1"
                         >
-                          <Option value="0"> 1</Option>
-                          <Option value="1"> .0</Option>
-                          <Option value="2"> .00</Option>
-                          <Option value="3"> .000</Option>
-                          <Option value="4"> .0000</Option>
-                          <Option value="5"> .00000</Option>
-                        </Select>
+                          <option value="0"> 1</option>
+                          <option value="1"> .0</option>
+                          <option value="2"> .00</option>
+                          <option value="3"> .000</option>
+                          <option value="4"> .0000</option>
+                          <option value="5"> .00000</option>
+                        </select>
                       </div>
                     </div>
                   </div>
                   <br></br>
                   <div
-                    className={`h-12 flex flex-row items-center border border-gray-300 p-3 bg-gray-200  'mt-2 rounded-t-lg' : 'my-2 rounded'`}
+                    className={`flex flex-row items-center border border-gray-300 p-3 bg-gray-200  'mt-2 rounded-t-lg' : 'my-2 rounded'`}
                   >
                     <div className="grow-0 pl-2 text-gray-700 font-bold w-48 ">
                       <Typography variant="h6">Value </Typography>
                     </div>
-                    <div className="grow flex flex-row-reverse">
+                    <div className=" grow flex flex-row-reverse">
                       <div className="w-full bg-white">
-                        <input
-                          className="focus:outline-none "
+                        <Input
+                          className="focus:outline-none h-10 w-full"
+                          inputMode="numeric"
                           type="text"
-                          onChange={(e) => numfix(e)}
                           value={state}
+                          onChange={tofix}
+                          label="12345"
                         />
                       </div>
                     </div>

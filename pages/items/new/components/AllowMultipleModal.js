@@ -13,43 +13,61 @@ import {
 import { useEffect } from "react";
 
 const AllowMultipleModal = (props) => {
-  const [open, setOpen] = useState(false);
-  const [arrmulti, setArrmulti] = useState([]);
   const [boxname, setBoxname] = useState("");
   const [inputText, setInputText] = useState("");
   const [filter, setFilter] = useState([]);
-  const [newarr, setNewarr] = useState([]);
   const [namealert, setNamealert] = useState(false);
+  const [newarr, setNewarr] = useState([]);
+  // const [Showvalue, setShowvalue] = useState([]);
+  const [arrsearch, setArrsearch] = useState([]);
 
-  let inputHandler = (e) => {
-    var lowerCase = e.target.value.toLowerCase();
-    setInputText(lowerCase);
-  };
-  const filteredData = newarr.filter((el) => {
-    if (inputText == "") {
-      return el;
-    } else {
-      return el.value.toLowerCase().includes(inputText);
-    }
-  });
+  // let inputHandler = (e) => {
+  //   var lowerCase = e.target.value.toLowerCase();
+  //   setInputText(e.target.value.toLowerCase());
+  // };
+
+  // const filteredData = newarr.filter((el) => {
+  //   if (inputText == "") {
+  //     return el;
+  //   } else {
+  //     return el.value.toLowerCase().includes(inputText);
+  //   }
+  // });
+
+  useEffect(() => {
+    setFilter(props.dataArr);
+    setNewarr(props.dataArr);
+    setArrsearch([...props.dataArr]);
+  }, [props.open]);
+
+  useEffect(() => {
+    const filteredData = newarr.filter((el) => {
+      if (inputText == "") {
+        return el;
+      } else {
+        return el.value.toLowerCase().includes(inputText);
+      }
+    });
+    setArrsearch([...filteredData]);
+
+    console.log(newarr);
+  }, [inputText]);
 
   const push = (e) => {
-    let count1 = newarr[newarr.length - 1].id + 1;
+    let count1 = arrsearch[arrsearch.length - 1].id + 1;
     if (boxname !== "") {
-      arrmulti.push({ id: count1, value: boxname, isChecked: true });
-      setArrmulti([...arrmulti]);
+      arrsearch.push({ id: count1, value: boxname, isChecked: true });
+      setNewarr([...arrsearch]);
+      // setArrsearch([...arrsearch]);
       setBoxname("");
     }
   };
 
-  console.log("arrmulti", arrmulti, "newwwarr", newarr);
-
   useEffect(() => {
-    let valueArr = filteredData.map((item) => item.value);
+    let valueArr = arrsearch.map((item) => item.value);
     let isDuplicate = valueArr.some(
       (item, index) => valueArr.indexOf(item) != index
     );
-    console.log(isDuplicate);
     if (isDuplicate == true) {
       setNamealert(true);
     } else if (isDuplicate !== true) {
@@ -57,19 +75,11 @@ const AllowMultipleModal = (props) => {
     }
   }, [push]);
 
-  // let filterD = props.dataArr.filter((x) => x !== "");
-
-  useEffect(() => {
-    setFilter(props.dataArr);
-
-    setNewarr([...props.dataArr, ...arrmulti]);
-  }, [props.open, arrmulti]);
-
   const removeItem = (item) => {
     if (boxname.value !== "") {
-      const remove = arrmulti.filter((x) => x.id !== item);
-      setArrmulti([...remove]);
-      console.log("new remove", arrmulti);
+      const remove = arrsearch.filter((x) => x.id !== item);
+      // setNewarr([...remove]);
+      setArrsearch([...remove]);
     }
   };
 
@@ -77,20 +87,37 @@ const AllowMultipleModal = (props) => {
 
   const handleChange = (e) => {
     const { name, checked } = e.target;
-    if (name === "allSelect") {
-      let tempUser = newarr.map((user) => {
+    if (name == "allSelect") {
+      let tempUser = arrsearch.map((user) => {
         return { ...user, isChecked: checked };
       });
-      setNewarr(tempUser);
+      // setNewarr([...new Set([...newarr, ...tempUser])]);
+      setArrsearch([...tempUser]);
     } else {
-      let tempUserold = newarr.map((item) =>
+      let tempUserold = arrsearch.map((item) =>
         item.id == name ? { ...item, isChecked: checked } : item
       );
-      setNewarr(tempUserold);
+      // setNewarr([...new Set([...newarr, ...tempUserold])]);
+      setArrsearch([...tempUserold]);
     }
   };
 
-  let checkT = newarr.filter((checked) => checked.isChecked == true);
+  console.log(arrsearch);
+
+  // const searchFunction = (e) => {
+  //   const { value } = e.target;
+  //   let arr = _.cloneDeep([...newarr]);
+  //   if (value !== "") {
+  //     const results = arr.filter((item) => {
+  //       return item.value.toLowerCase().startsWith(value.toLowerCase());
+  //     });
+  //     setShowvalue(results);
+  //   } else {
+  //     setShowvalue(arr);
+  //   }
+  // };
+
+  let checkT = arrsearch.filter((checked) => checked.isChecked == true);
 
   return (
     <Fragment>
@@ -150,7 +177,9 @@ const AllowMultipleModal = (props) => {
                   className="h-12  "
                   size="lg"
                   id="outlined-basic"
-                  onChange={inputHandler}
+                  value={inputText}
+                  // onChange={(e) => searchFunction(e)}
+                  onChange={(e) => setInputText(e.target.value.toLowerCase())}
                   label="Search values"
                 />
               </div>
@@ -164,7 +193,7 @@ const AllowMultipleModal = (props) => {
                     name="allSelect"
                     id="allSelect"
                     checked={
-                      !filteredData.some((user) => user?.isChecked !== true)
+                      !arrsearch.some((user) => user?.isChecked !== true)
                     }
                     onChange={handleChange}
                     label={`All Select (${checkT.length} selected)`}
@@ -173,7 +202,7 @@ const AllowMultipleModal = (props) => {
               </div>
             </div>
             <div className="pl-5 pr-5 ">
-              {filteredData.map((item, index) => {
+              {arrsearch.map((item, index) => {
                 return item.id > filter[filter.length - 1].id ? (
                   <div className="border-b-2 pl-6 flex flex-row">
                     <div className="form-check" key={index}>
