@@ -101,14 +101,6 @@ const addCustomAttributes = (props) => {
     }
   }, [push1]);
 
-  const removeItem = (item) => {
-    if (boxselection.value !== "") {
-      const remove = arr.filter((x) => x.id !== item);
-      setArr([...remove]);
-      console.log("new remove", arr);
-    }
-  };
-
   const handleChange = () => {
     let arr = _.cloneDeep([...variationsItems]);
     arr = dataText;
@@ -141,6 +133,14 @@ const addCustomAttributes = (props) => {
       selectArray,
     },
   ];
+
+  const removeItem = (item) => {
+    if (boxselection.value !== "") {
+      //  remove = arr.filter((x) => x.id !== item);
+      setArr(arr.filter((x) => x.id !== item));
+      // console.log("new remove", arr);
+    }
+  };
 
   const selectAttribute = React.createRef(null);
   let filter = arr.filter((x) => x.value != "");
@@ -367,9 +367,9 @@ const addCustomAttributes = (props) => {
                         <div className="h-11 flex items-center border-y-2 border-x-2 pl-6  flex-row">
                           <input
                             className="focus:outline-none"
-                            defaultValue={item.value}
                             onChange={(e) => editNew(e, index)}
                             size="lg"
+                            value={item.value}
                             type="text"
                           />
                           <div className="w-full flex justify-end pr-2">
