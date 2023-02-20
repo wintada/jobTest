@@ -439,7 +439,7 @@ const addCustomAttributes = (props) => {
                             onClick={() => setopenModal(!openModal)}
                             variant="text"
                           >
-                            All values
+                            All Values
                           </Button>
                         </div>
                       </div>
